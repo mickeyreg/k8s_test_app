@@ -6,7 +6,7 @@ Ten katalog zawiera manifest Kubernetes dla aplikacji `k8s_test_app` (frontend +
 
 Plik manifestu:
 
-- `k8s_test_app/manifest.yaml`
+- `manifest/manifest.yaml`
 
 ## Co wdraża manifest
 
@@ -29,14 +29,14 @@ Przed wdrożeniem upewnij się, ze:
   - `ghcr.io/mickeyreg/k8s_test_app-backend:latest`
   - `ghcr.io/mickeyreg/k8s_test_app-frontend:latest`
 
-Zaktualizuj pola image w `k8s_test_app/manifest.yaml` tak, aby pobierane były obrazy z Twojego użytkownika.
+Zaktualizuj pola image w `mainifest/manifest.yaml` tak, aby pobierane były obrazy z Twojego użytkownika.
 
 ## Wdrożenie
 
 Uruchom z katalogu student:
 
 ```bash
-kubectl --kubeconfig ~/.kube/sec06.yaml apply -f k8s_test_app/manifest/manifest.yaml
+kubectl --kubeconfig ~/.kube/sec06.yaml apply -f manifest/manifest.yaml
 ```
 
 ## Weryfikacja
@@ -66,15 +66,15 @@ Po poprawnym wdrożeniu i działającym Ingress aplikacja powinna być dostępna
 
 ## Aktualizacja wersji aplikacji
 
-Aktualizacja opiera się na zmianie tagu obrazu w `k8s_test_app/manifest.yaml` i ponownym jego wdrożeniu za pomocą komendy `apply`.
+Aktualizacja opiera się na zmianie tagu obrazu w `manifest/manifest.yaml` i ponownym jego wdrożeniu za pomocą komendy `apply`.
 
 Przyklad:
 
 - `ghcr.io/mickeyreg/k8s_test_app-backend:sha-...`
-- `ghcr.io/pzktit/k8s_test_app-frontend:sha-...`
+- `ghcr.io/mickeyreg/k8s_test_app-frontend:sha-...`
 
 Następnie:
 
 ```bash
-kubectl --kubeconfig ~/.kube/sec06.yaml apply -f k8s_test_app/manifest/manifest.yaml
+kubectl --kubeconfig ~/.kube/sec06.yaml apply -f manifest/manifest.yaml
 ```

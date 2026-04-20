@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - k8s_test_app/backend/**
-      - k8s_test_app/frontend/**
+      - backend/**
+      - frontend/**
       - .github/workflows/ghcr-publish.yml
   workflow_dispatch:
 
@@ -58,7 +58,7 @@ jobs:
       - name: Build and push image
         uses: docker/build-push-action@v7
         with:
-          context: ./k8s_test_app/${{ matrix.service }}
+          context: ./${{ matrix.service }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
