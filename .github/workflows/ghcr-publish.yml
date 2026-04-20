@@ -93,7 +93,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: mickeyreg/k8s_test_app-deploy
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_k8s_test_app_GITOPS }}
 
       - name: Install yq
         run: |
