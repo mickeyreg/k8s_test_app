@@ -30,7 +30,7 @@ def get_info():
     )
 
 @app.route('/debug')
-def get_info():
+def get_debug():
     headers = "<br>".join([f"{k}: {v}" for k, v in request.headers.items()])
     return headers
 
