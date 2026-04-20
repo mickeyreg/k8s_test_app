@@ -96,6 +96,7 @@ jobs:
         with:
           repository: mickeyreg/k8s_test_app-deploy
           token: ${{ secrets.PAT_k8s_test_app_GITOPS }}
+          persist-credentials: false
           path: gitops
 
       - name: Install yq
