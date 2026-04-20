@@ -90,10 +90,11 @@ jobs:
 
     steps:
       - name: Checkout GitOps repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: mickeyreg/k8s_test_app-deploy
           token: ${{ secrets.PAT_k8s_test_app_GITOPS }}
+          path: gitops
 
       - name: Install yq
         run: |
@@ -102,11 +103,11 @@ jobs:
 
       - name: Update backend image SHA
         run: |
-          yq -i '.spec.template.spec.containers[0].image = "ghcr.io/${{ github.repository_owner }}/k8s_test_app-backend@${{ needs.publish.outputs.backend_sha }}"' manifest/backend-deployment.yaml
+          yq -i '.spec.template.spec.containers[0].image = "ghcr.io/${{ github.repository_owner }}/k8s_test_app-backend@${{ needs.publish.outputs.backend_sha }}"' gitops/manifest/backend-deployment.yaml
 
       - name: Update frontend image SHA
         run: |
-          yq -i '.spec.template.spec.containers[0].image = "ghcr.io/${{ github.repository_owner }}/k8s_test_app-frontend@${{ needs.publish.outputs.frontend_sha }}"' manifest/frontend-deployment.yaml
+          yq -i '.spec.template.spec.containers[0].image = "ghcr.io/${{ github.repository_owner }}/k8s_test_app-frontend@${{ needs.publish.outputs.frontend_sha }}"' gitops/manifest/frontend-deployment.yaml
 
       - name: Commit and push changes
         run: |
