@@ -24,10 +24,15 @@ def get_info():
     remote_ip = request.headers.get("X-Forwarded-For", request.remote_addr)
 
     return (
-        f"Date: {current_time}<br>"
+        f"date: {current_time}<br>"
         f"container IP: {container_ip}<br>"
         f"your IP: {remote_ip}"
     )
+
+@app.route('/debug')
+def get_info():
+    headers = "<br>".join([f"{k}: {v}" for k, v in request.headers.items()])
+    return headers
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
