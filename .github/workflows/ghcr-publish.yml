@@ -113,6 +113,7 @@ jobs:
           yq -i '.spec.template.spec.containers[0].image = "ghcr.io/${{ github.repository_owner }}/k8s_test_app-frontend@${{ needs.publish.outputs.frontend_sha }}"' gitops/manifest/frontend-deployment.yaml
 
       - name: Commit and push changes
+        working-directory: gitops
         run: |
           git config user.email "ci@github"
           git config user.name "GitHub Actions"
