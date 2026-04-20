@@ -88,15 +88,15 @@ jobs:
       - name: Update manifests
         working-directory: gitops
         run: |
-          # Eksportujemy SHA jako zmienną środowiskową widoczną dla yq
-          export NEW_SHA="sha-${{ github.sha }}"
-          export OWNER="${{ github.repository_owner }}"
+          SHA_TAG="sha-${{ github.sha }}"
+          OWNER="${{ github.repository_owner }}"
 
-          echo "Aktualizuję manifesty na obraz z tagem: $NEW_SHA"
+          echo "Aktualizuję manifesty na: $OWNER z tagiem: $SHA_TAG"
 
-          # Używamy funkcji env() wewnątrz yq, co eliminuje problemy z cudzysłowami
-          yq -i '.spec.template.spec.containers[0].image = "ghcr.io/" + stdenv(OWNER) + "/k8s_test_app-backend:" + stdenv(NEW_SHA)' manifest/backend-deployment.yaml
-          yq -i '.spec.template.spec.containers[0].image = "ghcr.io/" + stdenv(OWNER) + "/k8s_test_app-frontend:" + stdenv(NEW_SHA)' manifest/frontend-deployment.yaml
+          # Składnia: '...image = "'$ZMIENNA'"'
+          # Bash połączy to w jeden ciąg zanim yq go w ogóle zobaczy
+          yq -i '.spec.template.spec.containers[0].image = "ghcr.io/'$OWNER'/k8s_test_app-backend:'$SHA_TAG'"' manifest/backend-deployment.yaml
+          yq -i '.spec.template.spec.containers[0].image = "ghcr.io/'$OWNER'/k8s_test_app-frontend:'$SHA_TAG'"' manifest/frontend-deployment.yaml
 
 
       - name: Commit and push changes
