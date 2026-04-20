@@ -31,15 +31,9 @@ jobs:
           - service: frontend
             image: k8s_test_app-frontend
 
-    outputs:
-      backend_sha: ${{ steps.meta_backend.outputs.digest }}
-      frontend_sha: ${{ steps.meta_frontend.outputs.digest }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        # with:
-        #   persist-credentials: false
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
@@ -51,23 +45,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract Docker metadata (backend)
-        if: matrix.service == 'backend'
-        id: meta_backend
+      - name: Extract Docker metadata
+        id: meta
         uses: docker/metadata-action@v6
         with:
-          images: ghcr.io/${{ github.repository_owner }}/k8s_test_app-backend
-          tags: |
-            type=raw,value=latest,enable={{is_default_branch}}
-            type=sha,format=long
-            type=ref,event=branch
-
-      - name: Extract Docker metadata (frontend)
-        if: matrix.service == 'frontend'
-        id: meta_frontend
-        uses: docker/metadata-action@v6
-        with:
-          images: ghcr.io/${{ github.repository_owner }}/k8s_test_app-frontend
+          images: ghcr.io/${{ github.repository_owner }}/${{ matrix.image }}
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=sha,format=long
@@ -78,8 +60,8 @@ jobs:
         with:
           context: ./${{ matrix.service }}
           push: true
-          tags: ${{ steps.meta_backend.outputs.tags || steps.meta_frontend.outputs.tags }}
-          labels: ${{ steps.meta_backend.outputs.labels || steps.meta_frontend.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -96,7 +78,6 @@ jobs:
         with:
           repository: mickeyreg/k8s_test_app-deploy
           token: ${{ secrets.PAT_K8S_TEST_APP_GITOPS }}
-          # persist-credentials: true
           path: gitops
 
       - name: Install yq
@@ -104,13 +85,17 @@ jobs:
           wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
           chmod +x /usr/local/bin/yq
 
-      - name: Update backend image SHA
+      - name: Update manifests
+        working-directory: gitops
         run: |
-          yq -i '.spec.template.spec.containers[0].image = "ghcr.io/${{ github.repository_owner }}/k8s_test_app-backend@${{ needs.publish.outputs.backend_sha }}"' gitops/manifest/backend-deployment.yaml
+          # Pobieramy pełny hash aktualnego commita
+          SHA="${{ github.sha }}"
 
-      - name: Update frontend image SHA
-        run: |
-          yq -i '.spec.template.spec.containers[0].image = "ghcr.io/${{ github.repository_owner }}/k8s_test_app-frontend@${{ needs.publish.outputs.frontend_sha }}"' gitops/manifest/frontend-deployment.yaml
+          echo "Aktualizuję manifesty na obraz z tagem: sha-$SHA"
+
+          # Używamy tagu sha-<full_sha>, który wygenerował docker/metadata-action
+          yq -i '.spec.template.spec.containers[0].image = "ghcr.io/${{ github.repository_owner }}/k8s_test_app-backend:sha-'"$SHA"'' manifest/backend-deployment.yaml
+          yq -i '.spec.template.spec.containers[0].image = "ghcr.io/${{ github.repository_owner }}/k8s_test_app-frontend:sha-'"$SHA"'' manifest/frontend-deployment.yaml
 
       - name: Commit and push changes
         working-directory: gitops
@@ -118,5 +103,4 @@ jobs:
           git config user.email "ci@github"
           git config user.name "GitHub Actions"
           git add .
-          git commit -m "Update images to new SHAs"
-          git push
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update images to ${{ github.sha }}" && git push)
