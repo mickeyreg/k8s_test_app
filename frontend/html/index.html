@@ -1,34 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="pl">
   <head>
+    <meta charset="UTF-8" />
     <title>Swarm Demo</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin-top: 60px;
+      }
+
+      h1 {
+        margin-bottom: 20px;
+      }
+
+      #info {
+        font-size: 1.2em;
+        white-space: pre-line; /* zachowuje nowe linie z backendu */
+        margin-bottom: 40px;
+      }
+
+      footer {
+        margin-top: 40px;
+        color: #666;
+        font-size: 0.9em;
+      }
+    </style>
   </head>
+
   <body>
-    <center>
-    <h1>Backend Info:</h1>
-    <p id="info"></p>
+    <h1>Backend Info</h1>
 
-<script>
-  function updateInfo() {
-    fetch("/api")
-      .then((response) => response.text())
-      .then((data) => {
-        document.getElementById("info").innerHTML = data;
-      })
-      .catch((error) => {
-        document.getElementById("info").innerText =
-          "Error fetching data: " + error;
-      });
-  }
+    <p id="info">Ładowanie…</p>
 
-  // Pierwsze wywołanie od razu
-  updateInfo();
+    <script>
+      function updateInfo() {
+        fetch("/api")
+          .then((response) => response.text())
+          .then((data) => {
+            document.getElementById("info").innerText = data;
+          })
+          .catch((error) => {
+            document.getElementById("info").innerText =
+              "Error fetching data: " + error;
+          });
+      }
 
-  // Kolejne co 5 sekund (5000 ms)
-  setInterval(updateInfo, 5000);
-</script>
+      updateInfo();               // pierwsze pobranie
+      setInterval(updateInfo, 5000); // odświeżanie co 5s
+    </script>
 
-    <p>Copyright: Me ;)</p>
-    </center>
+    <footer>© 2026 Me</footer>
   </body>
 </html>

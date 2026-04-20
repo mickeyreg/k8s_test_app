@@ -21,7 +21,9 @@ def get_info():
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     container_ip = get_container_ip()
-    remote_ip = request.headers.get("X-Forwarded-For", request.remote_addr)
+    # remote_ip = request.headers.get("X-Forwarded-For", request.remote_addr)
+    remote_ip = request.headers.get("Cf-Connecting-Ip") or \
+                request.headers.get("X-Forwarded-For", request.remote_addr)
 
     return (
         f"date: {current_time}<br>"
