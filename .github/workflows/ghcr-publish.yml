@@ -88,14 +88,16 @@ jobs:
       - name: Update manifests
         working-directory: gitops
         run: |
-          # Pobieramy pełny hash aktualnego commita
-          SHA="${{ github.sha }}"
+          # Eksportujemy SHA jako zmienną środowiskową widoczną dla yq
+          export NEW_SHA="sha-${{ github.sha }}"
+          export OWNER="${{ github.repository_owner }}"
 
-          echo "Aktualizuję manifesty na obraz z tagem: sha-$SHA"
+          echo "Aktualizuję manifesty na obraz z tagem: $NEW_SHA"
 
-          # Używamy tagu sha-<full_sha>, który wygenerował docker/metadata-action
-          yq -i '.spec.template.spec.containers[0].image = "ghcr.io/${{ github.repository_owner }}/k8s_test_app-backend:sha-'"$SHA"'' manifest/backend-deployment.yaml
-          yq -i '.spec.template.spec.containers[0].image = "ghcr.io/${{ github.repository_owner }}/k8s_test_app-frontend:sha-'"$SHA"'' manifest/frontend-deployment.yaml
+          # Używamy funkcji env() wewnątrz yq, co eliminuje problemy z cudzysłowami
+          yq -i '.spec.template.spec.containers[0].image = "ghcr.io/" + stdenv(OWNER) + "/k8s_test_app-backend:" + stdenv(NEW_SHA)' manifest/backend-deployment.yaml
+          yq -i '.spec.template.spec.containers[0].image = "ghcr.io/" + stdenv(OWNER) + "/k8s_test_app-frontend:" + stdenv(NEW_SHA)' manifest/frontend-deployment.yaml
+
 
       - name: Commit and push changes
         working-directory: gitops
