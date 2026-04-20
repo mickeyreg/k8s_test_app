@@ -2,7 +2,7 @@
 <html lang="pl">
   <head>
     <meta charset="UTF-8" />
-    <title>Swarm Demo</title>
+    <title>Test Page based on Swarm Demo</title>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -38,7 +38,7 @@
         fetch("/api")
           .then((response) => response.text())
           .then((data) => {
-            document.getElementById("info").innerText = data;
+            document.getElementById("info").innerHTML = data;
           })
           .catch((error) => {
             document.getElementById("info").innerText =
@@ -50,6 +50,6 @@
       setInterval(updateInfo, 5000); // odświeżanie co 5s
     </script>
 
-    <footer>© 2026 Me</footer>
+    <footer>© 2026 Me ;)</footer>
   </body>
 </html>
