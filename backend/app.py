@@ -24,8 +24,8 @@ def get_info():
     remote_ip = request.headers.get("X-Forwarded-For", request.remote_addr)
 
     return (
-        f"Date: {current_time}, "
-        f"container IP: {container_ip}, "
+        f"Date: {current_time}<br>"
+        f"container IP: {container_ip}<br>"
         f"your IP: {remote_ip}"
     )
 
