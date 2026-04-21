@@ -11,12 +11,13 @@ def get_service_status():
     token_path = "/var/run/secrets/kubernetes.io/serviceaccount/token"
     ca_path = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
     namespace = "k8s-test-app"
-    service = "frontend"
+    # service = "frontend"
 
     with open(token_path, "r") as f:
         token = f.read()
 
-    url = f"https://kubernetes.default.svc/api/v1/namespaces/{namespace}/services/{service}"
+    # url = f"https://kubernetes.default.svc/api/v1/namespaces/{namespace}/services/{service}"
+    url = f"https://kubernetes.default.svc/api/v1/namespaces/{namespace}/services"
 
     r = requests.get(
         url,
@@ -67,13 +68,15 @@ def get_info():
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     container_ip = get_container_ip()
+    service_ip = get_external_ip()
     # remote_ip = request.headers.get("X-Forwarded-For", request.remote_addr)
     remote_ip = request.headers.get("Cf-Connecting-Ip") or \
                 request.headers.get("X-Forwarded-For", request.remote_addr)
 
     return (
         f"date: {current_time}<br><br>"
-        f"container IP: {container_ip}<br>"
+        f"container IP: {container_ip}<br><br>"
+        f"service IP: {service_ip}"
         f"your IP: {remote_ip}"
     )
 
@@ -88,13 +91,14 @@ def get_debug():
     # Kubernetes service status
     try:
         svc = get_service_status()
-        status = svc.get("status", {})
-        external_ip = status.get("loadBalancer", {}).get("Ingress", [{}])[0].get("ip", "N/A")
+        # status = svc.get("status", {})
+        # external_ip = status.get("loadBalancer", {}).get("Ingress", [{}])[0].get("ip", "N/A")
 
         status_html = (
             "<h2>Kubernetes Service Status</h2>"
-            f"<b>External IP:</b> {external_ip}<br><br>"
-            "<pre>" + json.dumps(status, indent=2) + "</pre>"
+            # f"<b>External IP:</b> {external_ip}<br><br>"
+            # "<pre>" + json.dumps(status, indent=2) + "</pre>"
+            "<pre>" + json.dumps(svc, indent=2) + "</pre>"
         )
     except Exception as e:
         status_html = f"<h2>Kubernetes Service Status</h2>Error: {e}"
