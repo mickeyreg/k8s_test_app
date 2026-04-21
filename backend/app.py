@@ -76,7 +76,7 @@ def get_info():
     return (
         f"date: {current_time}<br><br>"
         f"container IP: {container_ip}<br><br>"
-        f"service IP: {service_ip}"
+        f"service IP: {service_ip}<br>"
         f"your IP: {remote_ip}"
     )
 
