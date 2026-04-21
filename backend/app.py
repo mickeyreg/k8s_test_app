@@ -33,8 +33,12 @@ def get_info():
 
 @app.route('/debug')
 def get_debug():
-    headers = "<br>".join([f"{k}: {v}" for k, v in request.headers.items()])
-    return headers
+    import os
+    headers = "<h2>Headers</h2>" + "<br>".join([f"{k}: {v}" for k, v in request.headers.items()])
+    environ = "<h2>WSGI environ</h2>" + "<br>".join([f"{k}: {v}" for k, v in request.environ.items()])
+    return headers + "<hr>" + environ
+    # headers = "<br>".join([f"{k}: {v}" for k, v in request.headers.items()])
+    # return headers
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
