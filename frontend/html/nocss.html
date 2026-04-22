@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Swarm Demo</title>
+  </head>
+  <body>
+    <center>
+    <h1>Backend Info:</h1>
+    <p id="info"></p>
+
+<script>
+  function updateInfo() {
+    fetch("/api")
+      .then((response) => response.text())
+      .then((data) => {
+        document.getElementById("info").innerHTML = data;
+      })
+      .catch((error) => {
+        document.getElementById("info").innerText =
+          "Error fetching data: " + error;
+      });
+  }
+
+  // Pierwsze wywołanie od razu
+  updateInfo();
+
+  // Kolejne co 5 sekund (5000 ms)
+  setInterval(updateInfo, 5000);
+</script>
+
+    <p>Copyright: Me ;)</p>
+    </center>
+  </body>
+</html>

@@ -23,7 +23,7 @@ Manifest tworzy:
 
 Przed wdrożeniem upewnij się, ze:
 
-- masz dostęp do klastra przez `kubeconfig` (np. `~/.kube/sec06.yaml`),
+- masz dostęp do klastra przez `kubeconfig` (np. `~/.kube/sec00.yaml`),
 - w klastrze działa Traefik (`ingressClassName: traefik`),
 - obrazy są opublikowane w GHCR:
   - `ghcr.io/mickeyreg/k8s_test_app-backend:latest`
@@ -36,33 +36,33 @@ Zaktualizuj pola image w `mainifest/manifest.yaml` tak, aby pobierane były obra
 Uruchom z katalogu student:
 
 ```bash
-kubectl --kubeconfig ~/.kube/sec06.yaml apply -f manifest/manifest.yaml
+kubectl --kubeconfig ~/.kube/sec00.yaml apply -f manifest/manifest.yaml
 ```
 
 ## Weryfikacja
 
 ```bash
-kubectl --kubeconfig ~/.kube/sec06.yaml get pods -n k8s-test-app
-kubectl --kubeconfig ~/.kube/sec06.yaml get svc -n k8s-test-app
-kubectl --kubeconfig ~/.kube/sec06.yaml get ingress -n k8s-test-app
+kubectl --kubeconfig ~/.kube/sec00.yaml get pods -n k8s-test-app
+kubectl --kubeconfig ~/.kube/sec00.yaml get svc -n k8s-test-app
+kubectl --kubeconfig ~/.kube/sec00.yaml get ingress -n k8s-test-app
 ```
 
 Sprawdzenie szczegółów:
 
 ```bash
-kubectl --kubeconfig ~/.kube/sec06.yaml describe ingress k8s-test-app -n k8s-test-app
-kubectl --kubeconfig ~/.kube/sec06.yaml logs deploy/backend -n k8s-test-app
+kubectl --kubeconfig ~/.kube/sec00.yaml describe ingress k8s-test-app -n k8s-test-app
+kubectl --kubeconfig ~/.kube/sec00.yaml logs deploy/backend -n k8s-test-app
 ```
 
 ## Dostep do aplikacji
 
 Węzeł zdefiniowany w manifeście:
 
-- `k8s_test_app.10.10.16.101.nip.io`
+- `sec00-sju.mojeprojekty.org`
 
 Po poprawnym wdrożeniu i działającym Ingress aplikacja powinna być dostępna pod adresem HTTP:
 
-- `http://k8s_test_app.10.10.16.101.nip.io`.
+- `https://sec00-sju.mojeprojekty.org`.
 
 ## Aktualizacja wersji aplikacji
 
@@ -76,5 +76,5 @@ Przyklad:
 Następnie:
 
 ```bash
-kubectl --kubeconfig ~/.kube/sec06.yaml apply -f manifest/manifest.yaml
+kubectl --kubeconfig ~/.kube/sec00.yaml apply -f manifest/manifest.yaml
 ```

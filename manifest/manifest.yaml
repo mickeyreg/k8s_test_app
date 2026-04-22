@@ -18,6 +18,7 @@ spec:
       labels:
         app: backend
     spec:
+      serviceAccountName: backend-sa
       containers:
         - name: backend
           image: ghcr.io/mickeyreg/k8s_test_app-backend:latest
@@ -106,7 +107,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: sec06-sju.mojeprojekty.org
+    - host: sec00-sju.mojeprojekty.org
       http:
         paths:
           - path: /api
@@ -147,3 +148,33 @@ spec:
         - name: frontend
           port: 80
 
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: backend-sa
+  namespace: k8s-test-app
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: backend-role
+  namespace: k8s-test-app
+rules:
+  - apiGroups: [""]
+    resources: ["services"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: backend-rb
+  namespace: k8s-test-app
+subjects:
+  - kind: ServiceAccount
+    name: backend-sa
+    namespace: k8s-test-app
+roleRef:
+  kind: Role
+  name: backend-role
+  apiGroup: rbac.authorization.k8s.io
