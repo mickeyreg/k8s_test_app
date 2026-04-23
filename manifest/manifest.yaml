@@ -92,6 +92,11 @@ spec:
               port: 80
             initialDelaySeconds: 15
             periodSeconds: 20
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
 ---
 apiVersion: v1
 kind: Service
