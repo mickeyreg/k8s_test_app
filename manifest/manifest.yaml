@@ -92,15 +92,6 @@ spec:
               port: 80
             initialDelaySeconds: 15
             periodSeconds: 20
-          command: ["/bin/sh", "-c"]
-          args:
-            - |
-              echo "window.RUNTIME_ENV = {
-                POD_IP: '$POD_IP',
-                NODE_IP: '$NODE_IP',
-                NODE_NAME: '$NODE_NAME'
-              };" > /usr/share/nginx/html/env.js &&
-              nginx -g 'daemon off;'
           env:
             - name: POD_IP
               valueFrom:

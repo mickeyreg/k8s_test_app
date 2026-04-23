@@ -51,25 +51,6 @@
       setInterval(updateInfo, 5000); // odświeżanie co 5s
     </script>
 
-    <script src="/env.js"></script>
-
-    <script>
-      function updateFrontendInfo() {
-        if (window.RUNTIME_ENV) {
-          const env = window.RUNTIME_ENV;
-          document.getElementById("frontend-info").innerText =
-            `Frontend Pod IP: ${env.POD_IP}
-             Frontend Node: ${env.NODE_NAME}
-             Frontend Node IP: ${env.NODE_IP}`;
-        }
-      }
-
-      updateFrontendInfo();
-    </script>
-
-    <h2>Info from Frontend Pod</h2>
-    <p id="frontend-info">Loading…</p>
-
     <footer>© 2026 by Me ;)</footer>
   </body>
 </html>
