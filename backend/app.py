@@ -73,11 +73,16 @@ def get_info():
     remote_ip = request.headers.get("Cf-Connecting-Ip") or \
                 request.headers.get("X-Forwarded-For", request.remote_addr)
 
+    node_name = os.getenv("NODE_NAME")
+    node_ip = os.getenv("NODE_IP")
+
     return (
         f"date: {current_time}<br><br>"
         f"container IP: {container_ip}<br><br>"
         f"service IP: {service_ip}<br>"
-        f"your IP: {remote_ip}"
+        f"your IP: {remote_ip}<br><br>"
+        f"node name: {node_name}<br><br>"
+        f"node IP: {node_ip}<br><br>"
     )
 
 @app.route('/debug')
