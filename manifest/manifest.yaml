@@ -37,6 +37,15 @@ spec:
               port: 5000
             initialDelaySeconds: 15
             periodSeconds: 20
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: NODE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
 ---
 apiVersion: v1
 kind: Service
@@ -178,3 +187,4 @@ roleRef:
   kind: Role
   name: backend-role
   apiGroup: rbac.authorization.k8s.io
+
