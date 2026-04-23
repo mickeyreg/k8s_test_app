@@ -59,6 +59,8 @@
           const env = window.RUNTIME_ENV;
           document.getElementById("frontend-info").innerText =
             `Frontend Pod IP: ${env.POD_IP}
+             Frontend Node: ${env.NODE_NAME}
+             Frontend Node IP: ${env.NODE_IP}`;
         }
       }
 
