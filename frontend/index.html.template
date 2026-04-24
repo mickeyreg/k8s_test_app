@@ -2,6 +2,7 @@
 <html lang="pl">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content="45">
     <title>Test Page based on Swarm Demo</title>
     <style>
       body {
@@ -17,6 +18,11 @@
       #info {
         font-size: 1.2em;
         white-space: pre-line; /* zachowuje nowe linie z backendu */
+        margin-bottom: 40px;
+      }
+
+      #frontend-info {
+        font-size: 1.2em;
         margin-bottom: 40px;
       }
 
@@ -45,16 +51,16 @@
           });
       }
 
-      updateInfo();               // pierwsze pobranie
+      updateInfo();                  // pierwsze pobranie po załadowaniu strony
 
-      setInterval(updateInfo, 5000); // odświeżanie co 5s
+      setInterval(updateInfo, 6000); // odświeżanie co 6s
     </script>
 
     <h2>Info from Frontend Pod</h2>
     <p id="frontend-info">
       container IP: ${POD_IP}<br><br>
       node name: ${NODE_NAME}<br>
-      node IP: ${NODE_IP}<br>
+      node IP: ${NODE_IP}
     </p>
 
     <footer>© 2026 by Me ;)</footer>

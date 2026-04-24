@@ -46,6 +46,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.hostIP
+            - name: TZ
+              value: "Europe/Warsaw"
 ---
 apiVersion: v1
 kind: Service
@@ -105,6 +107,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
+            - name: TZ
+              value: "Europe/Warsaw"
 ---
 apiVersion: v1
 kind: Service
