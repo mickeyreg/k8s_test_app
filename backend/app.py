@@ -79,10 +79,10 @@ def get_info():
     return (
         f"date: {current_time}<br><br>"
         f"container IP: {container_ip}<br><br>"
+        f"node name: {node_name}<br>"
+        f"node IP: {node_ip}<br><br>"
         f"service IP: {service_ip}<br>"
-        f"your IP: {remote_ip}<br><br>"
-        f"connected node name: {node_name}<br>"
-        f"connected node IP: {node_ip}<br><br>"
+        f"your IP: {remote_ip}"
     )
 
 @app.route('/debug')
